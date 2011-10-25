@@ -63,7 +63,7 @@
   #For convenience, and to validate the incoming response from the gateway somewhat, it also attempts
   #to find the order from the parameters we sent the gateway as part of the return URL and returns it
   #along with the transaction status.
-  def process_response
+  def process_response(order)
     begin
 	  
 	 # idealresponse = Nokogiri.XML(open( BASE_URL + "checkout/payment/ideal_callback").read)
