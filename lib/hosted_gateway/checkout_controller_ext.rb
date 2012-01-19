@@ -9,14 +9,16 @@ module HostedGateway
 
         #TODO? This method is more or less copied from the normal controller - so this sort
         #of this is prone to messing up updates - maybe we could use alias_method_chain or something?
+       
         def process_gateway_return
               
-          gateway = PaymentMethod.find_by_id_and_type(ExternalGateway.parse_custom_data(params)["payment_method_id"], "ExternalGateway")
-          
-          @order, payment_made = gateway.process_response
-		  #@order, payment_made = gateway
+          gateway = PaymentMethod.find_by_type_and_name("ExternalGateway", "iDEAL")
+          @order = Order.find_by_id(params[:id])
+          order = params[:id]
+          idealstatus = params[:status] #== "success"
+	
 
-          if @order && payment_made
+          if @order && idealstatus == "success"
             #Payment successfully processed
             @order.payments.clear
             payment = @order.payments.create
@@ -31,22 +33,19 @@ module HostedGateway
             end
 
             if @order.state == "complete" or @order.completed?
-              flash[:notice] = I18n.t(:order_processed_successfully)
+              flash[:notice] = "Uw betaling met iDEAL is geslaagd."
               #flash[:commerce_tracking] = "nothing special"
               redirect_to completion_route
             else
               redirect_to checkout_state_path(@order.state)
             end
-          elsif @order.nil?
-            #Order not passed through correctly
-            flash[:error] = I18n.t(:order_missing)
+          elsif @order && idealstatus == "cancel"
+            # Payment canceld by
+            flash[:error] = "U heeft de betaling met iDEAL afgebroken."
             redirect_to checkout_path
           else
             #Error processing payment
- 
- 
- 
-            flash[:error] = I18n.t(:payment_processing_failed)
+             flash[:error] = "De order kan niet gevonden worden of we hebben van uw bank nog geen bevestiging ontvangen. Als u in uw Internetbankieren ziet dat uw betaling heeft plaatsgevonden, zullen wij na ontvangst van de betaling tot levering overgaan."
             redirect_to checkout_state_path(@order.state) and return
           end
         end
@@ -54,4 +53,3 @@ module HostedGateway
     end
   end
 end
-

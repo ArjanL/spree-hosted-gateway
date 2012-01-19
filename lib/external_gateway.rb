@@ -69,13 +69,13 @@
 	 # idealresponse = Nokogiri.XML(open( BASE_URL + "checkout/payment/ideal_callback").read)
 
       #Find order
-	  order = Order.find_by_number(params["purchaseID"])
+	  order = Order.find_by_number(params["id"])
       raise ActiveRecord::RecordNotFound if order.nil?
       #raise ActiveRecord::RecordNotFound if order.token != ExternalGateway.parse_custom_data(params)["order_token"]
 
       #Check for successful response
-      transaction_succeeded = true
-      #transaction_succeeded = params["status"] == "success"
+      #transaction_succeeded = true
+      transaction_succeeded = params["status"] == "success"
       return [order, transaction_succeeded]
     rescue ActiveRecord::RecordNotFound
       #Return nil and false if we couldn't find the order - this is probably bad.
@@ -134,9 +134,9 @@
   #the payment gateway, such as server, and the parameter name of the transaction success/failure field.
   #This method allows users to add preferences using class_eval, which should automatically be picked up
   #by this method and inserted into relevant forms as hidden fields.
-  def additional_attributes
-    self.preferences.select { |key| !INTERNAL_PREFERENCES.include?(key[0].to_sym) }
-  end
+  #def additional_attributes
+   # self.preferences.select { |key| !INTERNAL_PREFERENCES.include?(key[0].to_sym) }
+  #end
   
   
   #added generating method
@@ -234,19 +234,21 @@
   end
   
   def get_urlSuccess(order)
-      return gateway_landing_url(:host => Spree::Config[:site_url])
+  	  returner = gateway_landing_url(:host => Spree::Config[:site_url])
+  	  returner = returner + "/#{order.id}?status=success";
+      return returner
   end
 
   def get_urlCancel(order)
-   	returner = self.preferences["ideal_urlcancel"]
-	returner = returner + "/fail/#{order.id}";
-	return returner
+  	  returner = gateway_landing_url(:host => Spree::Config[:site_url])
+  	  returner = returner + "/#{order.id}?status=cancel";
+      return returner
   end
   
   def get_urlError(order)
-   	returner = self.preferences["ideal_urlerror"]
-	returner = returner + "/#{order.id}/";
-	return returner
+  	  returner = gateway_landing_url(:host => Spree::Config[:site_url])
+  	  returner = returner + "/#{order.id}?status=error";
+      return returner
   end
   
   # hash order for Rabobank iDEAL Lite
