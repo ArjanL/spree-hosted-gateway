@@ -14,5 +14,5 @@ nl-NL:
             redirect_notice: "U wordt doorverwezen naar iDEAL, wanneer de betaling succesvol is afgerond dan wordt u terug verwezen naar de website om uw bestelling af te ronden."
         gateway_response:
             order_missing: "We kunnen deze order niet vinden. Neem alstublieft contact op met onze klantenservice."
-            admin_order_missing: "The order could not be found, it looks like some information was not passed back by the payment gateway."
+            admin_order_missing: "De order kan niet gevonden worden, er is geen terugkoppeling van iDEAL ontvangen."
 
