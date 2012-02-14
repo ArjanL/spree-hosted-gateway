@@ -34,12 +34,12 @@
   preference :payment_type, :string, :default => 'ideal'
   
   # from admin => DB
-  preference :merchantid, :string, :default => "002031546"
-  preference :description, :string, :default => "Evans&Watson"
+  preference :merchantid, :string
+  preference :description, :string
   preference :ideal_urlsuccess, :string, :default => "http://evansnwatson.heroku.com"
   preference :ideal_urlcancel, :string, :default => "http://evansnwatson.heroku.com/cancel"
   preference :ideal_urlerror, :string, :default => "http://evansnwatson.heroku.com/404"
-  preference :secret, :string, :default => "cJqMwgU9XFatXvbR"
+  preference :secret, :string
 
   #An array of preferences that should not be automatically inserted into the form
   INTERNAL_PREFERENCES = [:server, :status_param_key, :successful_transaction_value, :custom_data, :urlSuccess, :urlError, :urlCancel]
