@@ -235,19 +235,19 @@
   
   def get_urlSuccess(order)
   	  returner = gateway_landing_url(:host => Spree::Config[:site_url])
-  	  returner = returner + "/#{order.id}?status=success";
+  	  returner = returner + "#{order.id}?status=success";
       return returner
   end
 
   def get_urlCancel(order)
   	  returner = gateway_landing_url(:host => Spree::Config[:site_url])
-  	  returner = returner + "/#{order.id}?status=cancel";
+  	  returner = returner + "#{order.id}?status=cancel";
       return returner
   end
   
   def get_urlError(order)
   	  returner = gateway_landing_url(:host => Spree::Config[:site_url])
-  	  returner = returner + "/#{order.id}?status=error";
+  	  returner = returner + "#{order.id}?status=error";
       return returner
   end
   
