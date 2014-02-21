@@ -42,7 +42,7 @@ module HostedGateway
           elsif @order && idealstatus == "cancel"
             # Payment canceld by
             flash[:error] = "U heeft de betaling met iDEAL afgebroken."
-            redirect_to checkout_path
+            redirect_to checkout_state_path(@order.state)
           else
             #Error processing payment
              flash[:error] = "De order kan niet gevonden worden of we hebben van uw bank nog geen bevestiging ontvangen. Als u in uw Internetbankieren ziet dat uw betaling heeft plaatsgevonden, zullen wij na ontvangst van de betaling tot levering overgaan."
